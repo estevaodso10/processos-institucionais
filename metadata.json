@@ -1,0 +1,5 @@
+{
+  "name": "Guia de Processos Institucionais",
+  "description": "Uma aplicação para ajudar funcionários a navegar pelos processos e regras institucionais através de um fluxo de perguntas e respostas editável.",
+  "requestFramePermissions": []
+}
