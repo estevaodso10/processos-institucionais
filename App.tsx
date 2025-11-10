@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useLocalStorage from './hooks/useLocalStorage';
 import type { Process } from './types';
 import ProcessPlayer from './components/ProcessPlayer';
@@ -46,6 +46,12 @@ function App() {
   const [editingProcess, setEditingProcess] = useState<Process | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
+  useEffect(() => {
+    setProcesses(currentProcesses =>
+      [...currentProcesses].sort((a, b) => a.name.localeCompare(b.name))
+    );
+  }, []);
+
   const handleSelectProcess = (process: Process) => {
     setSelectedProcess(process);
   };
@@ -56,7 +62,7 @@ function App() {
   };
 
   const handleSaveProcess = (updatedProcess: Process) => {
-    setProcesses(prev => prev.map(p => p.id === updatedProcess.id ? updatedProcess : p));
+    setProcesses(prev => prev.map(p => p.id === updatedProcess.id ? updatedProcess : p).sort((a, b) => a.name.localeCompare(b.name)));
     setEditingProcess(null);
     setMode('player');
   };
@@ -67,7 +73,7 @@ function App() {
       name: 'Novo Processo Sem Título',
       questions: []
     };
-    setProcesses(prev => [...prev, newProcess]);
+    setProcesses(prev => [...prev, newProcess].sort((a, b) => a.name.localeCompare(b.name)));
     setEditingProcess(newProcess);
     setMode('editor');
   };
