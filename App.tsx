@@ -136,14 +136,14 @@ function App() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {filteredProcesses.map(p => (
-                  <div key={p.id} className="bg-gray-medium p-4 rounded-lg flex justify-between items-center group text-left">
+                  <div key={p.id} className="bg-gray-medium p-4 rounded-lg flex justify-between items-center text-left">
                       <span className="font-semibold text-text-primary">{p.name}</span>
                       <div className="flex items-center">
-                          <button onClick={() => handleSelectProcess(p)} className="px-4 py-2 bg-brand-secondary text-white font-semibold rounded-lg hover:bg-brand-accent transition-colors mr-2 whitespace-nowrap">
+                          <button onClick={() => handleSelectProcess(p)} className="px-4 py-2 bg-brand-secondary text-white font-semibold rounded-lg hover:bg-brand-accent transition-colors whitespace-nowrap">
                               Iniciar
                           </button>
                           {isAdmin && (
-                            <button onClick={() => handleEditProcess(p)} className="px-3 py-2 bg-gray-light text-text-secondary font-semibold rounded-lg hover:bg-gray-medium/50 transition-colors opacity-0 group-hover:opacity-100">
+                            <button onClick={() => handleEditProcess(p)} className="px-3 py-2 bg-gray-light text-text-secondary font-semibold rounded-lg hover:bg-gray-medium/50 transition-colors ml-2">
                                Editar
                             </button>
                           )}
