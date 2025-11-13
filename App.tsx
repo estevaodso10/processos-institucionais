@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import useLocalStorage from './hooks/useLocalStorage';
+import * as api from './services/api';
 import type { Process } from './types';
 import ProcessPlayer from './components/ProcessPlayer';
 import ProcessEditor from './components/ProcessEditor';
@@ -8,41 +8,9 @@ import LoginModal from './components/LoginModal';
 import UserIcon from './components/icons/UserIcon';
 import LogoutIcon from './components/icons/LogoutIcon';
 
-const initialProcesses: Process[] = [
-  {
-    id: "1",
-    name: "Mudança de Turno",
-    questions: [
-      {
-        id: "q1",
-        text: "O aluno já abriu o requerimento no portal do aluno?",
-        answers: [
-          { id: "a11", text: "Sim", action: "next" },
-          { id: "a12", text: "Não", action: "message", message: "Para iniciar o processo de mudança de turno, o aluno deverá abrir o requerimento no Portal do Aluno." }
-        ]
-      },
-      {
-        id: "q2",
-        text: "O aluno realizou o pagamento da taxa no valor de R$80,00?",
-        answers: [
-          { id: "a21", text: "Sim", action: "next" },
-          { id: "a22", text: "Não", action: "message", message: "O aluno precisa pagar uma taxa de R$80,00 para que o processo aberto comece a tramitar." }
-        ]
-      },
-      {
-        id: "q3",
-        text: "A solicitação está dentro do prazo do calendário acadêmico?",
-        answers: [
-          { id: "a31", text: "Sim", action: "next" },
-          { id: "a32", text: "Não", action: "message", message: "O processo não pode ser continuado fora do prazo estipulado no calendário acadêmico." }
-        ]
-      }
-    ]
-  }
-];
-
 function App() {
-  const [processes, setProcesses] = useLocalStorage<Process[]>('processes', initialProcesses);
+  const [processes, setProcesses] = useState<Process[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [mode, setMode] = useState<'player' | 'editor'>('player');
   const [selectedProcess, setSelectedProcess] = useState<Process | null>(null);
   const [editingProcess, setEditingProcess] = useState<Process | null>(null);
@@ -51,9 +19,15 @@ function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   useEffect(() => {
-    setProcesses(currentProcesses =>
-      [...currentProcesses].sort((a, b) => a.name.localeCompare(b.name))
-    );
+    const loadProcesses = async () => {
+      setIsLoading(true);
+      const fetchedProcesses = await api.getProcesses();
+      setProcesses(fetchedProcesses);
+      setIsLoading(false);
+    };
+    
+    loadProcesses();
+
     const adminStatus = sessionStorage.getItem('isAdmin');
     if (adminStatus === 'true') {
       setIsAdmin(true);
@@ -69,26 +43,34 @@ function App() {
     setMode('editor');
   };
 
-  const handleSaveProcess = (updatedProcess: Process) => {
-    setProcesses(prev => prev.map(p => p.id === updatedProcess.id ? updatedProcess : p).sort((a, b) => a.name.localeCompare(b.name)));
+  const handleSaveProcess = async (updatedProcess: Process) => {
+    const updatedList = processes.map(p => p.id === updatedProcess.id ? updatedProcess : p);
+    const sortedList = [...updatedList].sort((a, b) => a.name.localeCompare(b.name));
+    setProcesses(sortedList);
+    await api.saveProcesses(updatedList);
     setEditingProcess(null);
     setMode('player');
   };
   
-  const handleCreateNewProcess = () => {
+  const handleCreateNewProcess = async () => {
     const newProcess: Process = {
       id: crypto.randomUUID(),
       name: 'Novo Processo Sem Título',
       questions: []
     };
-    setProcesses(prev => [...prev, newProcess].sort((a, b) => a.name.localeCompare(b.name)));
+    const updatedList = [...processes, newProcess];
+    const sortedList = [...updatedList].sort((a, b) => a.name.localeCompare(b.name));
+    setProcesses(sortedList);
+    await api.saveProcesses(updatedList);
     setEditingProcess(newProcess);
     setMode('editor');
   };
   
-  const handleDeleteProcess = (processId: string) => {
+  const handleDeleteProcess = async (processId: string) => {
     if (window.confirm('Tem certeza que deseja excluir este processo? Esta ação não pode ser desfeita.')) {
-        setProcesses(prev => prev.filter(p => p.id !== processId));
+        const updatedList = processes.filter(p => p.id !== processId);
+        setProcesses(updatedList);
+        await api.saveProcesses(updatedList);
         setEditingProcess(null);
         setMode('player');
     }
@@ -207,31 +189,39 @@ function App() {
       </header>
       
       <main>
-        {mode === 'player' && (
-          selectedProcess ? (
-            <ProcessPlayer process={selectedProcess} onBack={() => setSelectedProcess(null)} />
-          ) : (
-            renderPlayerHome()
-          )
-        )}
-        
-        {mode === 'editor' && (
-           editingProcess && isAdmin ? (
-             <ProcessEditor 
-                process={editingProcess} 
-                onSave={handleSaveProcess} 
-                onCancel={() => {setEditingProcess(null); setMode('player');}}
-                onDelete={handleDeleteProcess}
-             />
-           ) : (
-            <div className="text-center mt-16">
-                <h2 className="text-2xl font-bold text-text-primary mb-4">Acesso Restrito</h2>
-                <p className="text-text-secondary mb-6">Você precisa ser um administrador para acessar o modo de edição.</p>
-                <button onClick={() => setIsLoginModalOpen(true)} className="px-6 py-2 bg-brand-secondary text-white font-semibold rounded-lg hover:bg-brand-accent transition-colors">
-                    Fazer Login
-                </button>
+        {isLoading ? (
+            <div className="text-center mt-16 text-text-secondary">
+              <p>Carregando processos...</p>
             </div>
-           )
+        ) : (
+          <>
+            {mode === 'player' && (
+              selectedProcess ? (
+                <ProcessPlayer process={selectedProcess} onBack={() => setSelectedProcess(null)} />
+              ) : (
+                renderPlayerHome()
+              )
+            )}
+            
+            {mode === 'editor' && (
+              editingProcess && isAdmin ? (
+                <ProcessEditor 
+                    process={editingProcess} 
+                    onSave={handleSaveProcess} 
+                    onCancel={() => {setEditingProcess(null); setMode('player');}}
+                    onDelete={handleDeleteProcess}
+                />
+              ) : (
+                <div className="text-center mt-16">
+                    <h2 className="text-2xl font-bold text-text-primary mb-4">Acesso Restrito</h2>
+                    <p className="text-text-secondary mb-6">Você precisa ser um administrador para acessar o modo de edição.</p>
+                    <button onClick={() => setIsLoginModalOpen(true)} className="px-6 py-2 bg-brand-secondary text-white font-semibold rounded-lg hover:bg-brand-accent transition-colors">
+                        Fazer Login
+                    </button>
+                </div>
+              )
+            )}
+          </>
         )}
       </main>
     </div>
