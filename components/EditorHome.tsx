@@ -74,12 +74,12 @@ const EditorHome: React.FC<EditorHomeProps> = ({
       </button>
 
       <div className="mt-8 p-4 bg-gray-light/50 border border-brand-primary/20 rounded-lg">
-          <h4 className="font-bold text-brand-light">Como salvar as alterações permanentemente?</h4>
+          <h4 className="font-bold text-brand-light">Como salvar as alterações para todos?</h4>
           <p className="text-sm text-text-secondary mt-1">
               As edições são salvas localmente no seu navegador. Para que todos os usuários vejam as atualizações, você deve:
-              <br /> 1. Clicar em <strong>"Exportar JSON"</strong> para baixar o arquivo de configuração.
+              <br /> 1. Clicar em <strong>"Exportar JSON"</strong> para baixar o arquivo de configuração atual.
               <br /> 2. Enviar este arquivo para o desenvolvedor responsável.
-              <br /> 3. O desenvolvedor irá atualizar a aplicação com os novos processos.
+              <br /> 3. O desenvolvedor irá substituir o arquivo <strong>processos.json</strong> na aplicação e publicá-la novamente.
           </p>
       </div>
 
