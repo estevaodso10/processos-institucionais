@@ -4,23 +4,6 @@
     "name": "Mudança de Turno",
     "questions": [
       {
-        "id": "q3",
-        "text": "A solicitação está dentro do prazo do calendário acadêmico?",
-        "answers": [
-          {
-            "id": "a31",
-            "text": "Sim",
-            "action": "next"
-          },
-          {
-            "id": "a32",
-            "text": "Não",
-            "action": "message",
-            "message": "O processo não pode ser continuado fora do prazo estipulado no calendário acadêmico."
-          }
-        ]
-      },
-      {
         "id": "q1",
         "text": "O aluno abriu o requerimento no portal do aluno?",
         "answers": [
@@ -34,6 +17,23 @@
             "text": "Não",
             "action": "message",
             "message": "Para iniciar o processo de mudança de turno, o aluno deverá abrir o requerimento no Portal do Aluno."
+          }
+        ]
+      },
+      {
+        "id": "q3",
+        "text": "A solicitação está dentro do prazo do calendário acadêmico?",
+        "answers": [
+          {
+            "id": "a31",
+            "text": "Sim",
+            "action": "next"
+          },
+          {
+            "id": "a32",
+            "text": "Não",
+            "action": "message",
+            "message": "O processo não pode ser continuado fora do prazo estipulado no calendário acadêmico."
           }
         ]
       },
@@ -108,7 +108,7 @@
           },
           {
             "id": "6545604d-e0d1-44a5-ba73-d673a65447fe",
-            "text": "A mudança já foi realizada.",
+            "text": "A mudança já foi realiada.",
             "action": "next",
             "message": "Instrução para \"Não\"."
           }
