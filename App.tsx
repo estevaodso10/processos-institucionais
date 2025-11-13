@@ -14,23 +14,6 @@ const initialProcesses: Process[] = [
     "name": "Mudança de Turno",
     "questions": [
       {
-        "id": "q1",
-        "text": "O aluno já abriu o requerimento no portal do aluno?",
-        "answers": [
-          {
-            "id": "a11",
-            "text": "Sim",
-            "action": "next"
-          },
-          {
-            "id": "a12",
-            "text": "Não",
-            "action": "message",
-            "message": "Para iniciar o processo de mudança de turno, o aluno deverá abrir o requerimento no Portal do Aluno."
-          }
-        ]
-      },
-      {
         "id": "q3",
         "text": "A solicitação está dentro do prazo do calendário acadêmico?",
         "answers": [
@@ -48,6 +31,23 @@ const initialProcesses: Process[] = [
         ]
       },
       {
+        "id": "q1",
+        "text": "O aluno abriu o requerimento no portal do aluno?",
+        "answers": [
+          {
+            "id": "a11",
+            "text": "Sim",
+            "action": "next"
+          },
+          {
+            "id": "a12",
+            "text": "Não",
+            "action": "message",
+            "message": "Para iniciar o processo de mudança de turno, o aluno deverá abrir o requerimento no Portal do Aluno."
+          }
+        ]
+      },
+      {
         "id": "q2",
         "text": "O aluno realizou o pagamento da taxa no valor de R$80,00?",
         "answers": [
@@ -60,7 +60,67 @@ const initialProcesses: Process[] = [
             "id": "a22",
             "text": "Não",
             "action": "message",
-            "message": "O aluno precisa pagar uma taxa de R$80,00 para que o processo aberto comece a tramitar."
+            "message": "Após a abertura do requerimento no Portal do Aluno, é gerada uma taxa de R$80,00. Após o pagamento, o requerimento começará a tramitar. O aluno poderá solicitar ao setor financeiro a isenção da taxa."
+          },
+          {
+            "id": "ab056f62-58c3-4ecc-937e-ca4c9ef93041",
+            "text": "Isenção da taxa",
+            "action": "next",
+            "message": "Instrução para nova opção."
+          }
+        ]
+      },
+      {
+        "id": "67047468-033b-471b-b22a-9b2de2f78c06",
+        "text": "O requerimento está no setor financeiro?",
+        "answers": [
+          {
+            "id": "40014b5c-b035-4644-884a-699a52554e13",
+            "text": "Sim",
+            "action": "message",
+            "message": "O aluno precisa aguardar o deferimento."
+          },
+          {
+            "id": "fc9b0d43-61e1-4727-bee2-4b7d3f4e312a",
+            "text": "Não",
+            "action": "next",
+            "message": "Instrução para \"Não\"."
+          }
+        ]
+      },
+      {
+        "id": "66f00cd8-15de-4d16-8938-2a11623898a1",
+        "text": "O requerimento está na coordenação do curso?",
+        "answers": [
+          {
+            "id": "c8c6206e-28a6-4bcd-9f45-8b22a2c765a6",
+            "text": "Sim",
+            "action": "message",
+            "message": "O aluno precisa aguardar o deferimento."
+          },
+          {
+            "id": "80c3e9a7-b076-4b91-85ab-c82e4640660e",
+            "text": "Não",
+            "action": "next",
+            "message": "Instrução para \"Não\"."
+          }
+        ]
+      },
+      {
+        "id": "1232ad33-6808-4f0c-9a83-c79e624c9976",
+        "text": "O requerimento está na secretaria geral?",
+        "answers": [
+          {
+            "id": "b8da2e71-074b-406f-8a7a-aa75eabcf747",
+            "text": "Sim",
+            "action": "message",
+            "message": "Esta é a última etapa do processo. Agora, a secretaria geral fará a mudança de turno no sistema."
+          },
+          {
+            "id": "6545604d-e0d1-44a5-ba73-d673a65447fe",
+            "text": "A mudança já foi realiada.",
+            "action": "next",
+            "message": "Instrução para \"Não\"."
           }
         ]
       }
