@@ -10,31 +10,58 @@ import EditorHome from './components/EditorHome';
 
 const initialProcesses: Process[] = [
   {
-    id: "1",
-    name: "Mudança de Turno",
-    questions: [
+    "id": "1",
+    "name": "Mudança de Turno",
+    "questions": [
       {
-        id: "q1",
-        text: "O aluno já abriu o requerimento no portal do aluno?",
-        answers: [
-          { id: "a11", text: "Sim", action: "next" },
-          { id: "a12", text: "Não", action: "message", message: "Para iniciar o processo de mudança de turno, o aluno deverá abrir o requerimento no Portal do Aluno." }
+        "id": "q1",
+        "text": "O aluno já abriu o requerimento no portal do aluno?",
+        "answers": [
+          {
+            "id": "a11",
+            "text": "Sim",
+            "action": "next"
+          },
+          {
+            "id": "a12",
+            "text": "Não",
+            "action": "message",
+            "message": "Para iniciar o processo de mudança de turno, o aluno deverá abrir o requerimento no Portal do Aluno."
+          }
         ]
       },
       {
-        id: "q2",
-        text: "O aluno realizou o pagamento da taxa no valor de R$80,00?",
-        answers: [
-          { id: "a21", text: "Sim", action: "next" },
-          { id: "a22", text: "Não", action: "message", message: "O aluno precisa pagar uma taxa de R$80,00 para que o processo aberto comece a tramitar." }
+        "id": "q3",
+        "text": "A solicitação está dentro do prazo do calendário acadêmico?",
+        "answers": [
+          {
+            "id": "a31",
+            "text": "Sim",
+            "action": "next"
+          },
+          {
+            "id": "a32",
+            "text": "Não",
+            "action": "message",
+            "message": "O processo não pode ser continuado fora do prazo estipulado no calendário acadêmico."
+          }
         ]
       },
       {
-        id: "q3",
-        text: "A solicitação está dentro do prazo do calendário acadêmico?",
-        answers: [
-          { id: "a31", text: "Sim", action: "next" },
-          { id: "a32", text: "Não", action: "message", message: "O processo não pode ser continuado fora do prazo estipulado no calendário acadêmico." }
+        "id": "q2",
+        "text": "O aluno realizou o pagamento da taxa no valor de R$80,00?",
+        "answers": [
+          {
+            "id": "a21",
+            "text": "Sim",
+            "action": "next"
+          },
+          {
+            "id": "a22",
+            "text": "Não",
+            "action": "message",
+            "message": "O aluno precisa pagar uma taxa de R$80,00 para que o processo aberto comece a tramitar."
+          }
         ]
       }
     ]
